@@ -8,3 +8,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+logging:
+  level:
+    org.springframework.web : INFO
+    ua.artcode: DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: logs/logs.log
