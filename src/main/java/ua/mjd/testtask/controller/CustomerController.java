@@ -20,7 +20,7 @@ public class CustomerController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
-    CustomerServiceImpl customerService;
+    private CustomerServiceImpl customerService;
 
     @Autowired
     public CustomerController(CustomerServiceImpl customerService) {
