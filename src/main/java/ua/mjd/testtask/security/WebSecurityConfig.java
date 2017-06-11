@@ -1,6 +1,9 @@
 package ua.mjd.testtask.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,15 +22,18 @@ import ua.mjd.testtask.model.Account;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(WebSecurityConfig.class);
+    @Autowired
     AccountRepository accountRepository;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
                 .authorizeRequests()
-                .antMatchers("/","/customers/getAll").permitAll()
-                .antMatchers("/customer/update").authenticated()
+                .antMatchers("/").permitAll()
                 .antMatchers("/customers/update").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and().logout().logoutUrl("/logout").invalidateHttpSession(true)
@@ -47,19 +53,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 and().withUser("user").password("password").roles("USER");*/
     }
 
-
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
 
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 Account account = accountRepository.findByName(username);
-                System.out.println("ACCOUNT"+account.getName());
-                if(account != null) {
+                if (account != null) {
                     return new User(account.getName(), account.getPassword(), true, true, true, true,
                             AuthorityUtils.createAuthorityList(account.getUserType().toString()));
+
                 } else {
-                    throw new UsernameNotFoundException("could not find the user '"
+                    LOGGER.error("Could not find the user {} ", username);
+                    throw new UsernameNotFoundException("Could not find the user '"
                             + username + "'");
                 }
             }

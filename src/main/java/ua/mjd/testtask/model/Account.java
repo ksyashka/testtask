@@ -21,15 +21,15 @@ public class Account {
     private UserType userType;
 
     public Account() {
-        userType = USER;
     }
 
     public Account(String name, String password) {
         this.name = name;
         this.password = password;
         this.userType = USER;
-        if (name.substring(0,1).toLowerCase().equals('a'))
-            userType = ADMIN;
+        String s = name.substring(0,1).toLowerCase();
+        if (name.substring(0,1).toLowerCase().equals("a"))
+            this.userType = ADMIN;
     }
 
     public String getName() {
