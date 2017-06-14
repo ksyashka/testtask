@@ -64,7 +64,7 @@ public class CustomerController {
     }
 
     @ApiOperation(httpMethod = "POST",
-            value = "Resource to create a customere",
+            value = "Resource to create a customer",
             response = String.class,
             produces = "application/json")
     @RequestMapping(value = "/customers/add", method = RequestMethod.POST)
